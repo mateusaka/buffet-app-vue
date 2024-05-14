@@ -4,7 +4,9 @@ const app = Vue.createApp({
             appName: 'Cade Buffet?',
             buffets: [],
             currentBuffet: {},
-            events: []
+            events: [],
+            searchQuery: '',
+            searchResult: []
         }
     },
 
@@ -26,6 +28,16 @@ const app = Vue.createApp({
                 const response = await fetch(`http://127.0.0.1:3000/api/v1/events/${buffet.id}`)
                 const data = await response.json()
                 this.events = data
+            } catch (error) {
+                console.log(error)
+            }
+        },
+
+        async search(query) {
+            try {
+                const response = await fetch(`http://127.0.0.1:3000/api/v1/buffets/search?name=${query}`)
+                const data = await response.json()
+                this.searchResult = data
             } catch (error) {
                 console.log(error)
             }
