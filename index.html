@@ -29,6 +29,7 @@
                     aria-selected="false">Procurar</button>
             </form>
         </ul>
+
         <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab"
                 tabindex="0">
@@ -141,6 +142,23 @@
                                             </template>
                                         </li>
                                     </ul>
+                                    <div class="d-flex flex-column align-items-end">
+                                        <div class="form-floating my-2">
+                                            <input v-model="availQuantity" type="number" class="form-control" id="quantity" placeholder="name@example.com">
+                                            <label for="quantity">Quantidade de pessoas</label>
+                                        </div>
+                                        <div class="form-floating my-2">
+                                            <input v-model="availDate" type="date" class="form-control" id="date" placeholder="name@example.com">
+                                            <label for="date">Data</label>
+                                        </div>
+                                        <button v-on:click="availability(event.id, availDate, availQuantity)"
+                                                type="button" class="btn btn-success my-2">Verificar disponibilidade</button>
+
+                                        <div v-bind:id="'custom-alert-' + event.id" class="d-none alert alert-success">      
+                                            
+                                            <button v-on:click="closeAlert(event.id)" type="button" class="btn-close" aria-label="Close"></button>
+                                        </div>
+                                    </div>
                                 </div>
                             </template>
                             <template v-else>
@@ -162,6 +180,7 @@
         crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="main.js"></script>
+    <script src="script.js"></script>
 </body>
 
 </html>
