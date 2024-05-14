@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br" data-bs-theme="dark">
 
 <head>
     <meta charset="UTF-8">
@@ -18,8 +18,9 @@
                     type="button" role="tab" aria-controls="pills-home" aria-selected="true">Home</button>
             </li>
             <li class="nav-item m-2" role="presentation">
-                <button v-on:click="listBuffets" class="nav-link" id="pills-buffet-tab" data-bs-toggle="pill" data-bs-target="#pills-buffet"
-                    type="button" role="tab" aria-controls="pills-buffet" aria-selected="false">Buffets</button>
+                <button v-on:click="listBuffets" class="nav-link" id="pills-buffet-tab" data-bs-toggle="pill"
+                    data-bs-target="#pills-buffet" type="button" role="tab" aria-controls="pills-buffet"
+                    aria-selected="false">Buffets</button>
             </li>
             <form class="d-flex m-2 ms-auto p-2" role="search">
                 <input class="form-control me-2" type="search" placeholder="Procurar" aria-label="Search">
@@ -45,7 +46,7 @@
                             <div class="card-body d-flex flex-column align-items-center">
                                 <h5 class="card-title">{{ buffet.brand_name }}</h5>
                                 <p class="card-text">{{ buffet.city }} {{ buffet.state }}</p>
-                                <a href="#" class="btn btn-primary">Saiba mais</a>
+                                <button v-on:click="showEvents(buffet)" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Saiba mais</button>
                             </div>
                         </div>
                     </div>
@@ -54,6 +55,88 @@
             <div class="tab-pane fade" id="pills-search" role="tabpanel" aria-labelledby="pills-search-tab"
                 tabindex="0">
                 <h1>Search</h1>
+            </div>
+        </div>
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">{{ currentBuffet.brand_name }}</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <p>{{ currentBuffet.description }}</p>
+                            <p>CNPJ: {{ currentBuffet.cnpj }}</p>
+                            <p>Telefone: <a v-bind:href="'tel:' + currentBuffet.phone">{{ currentBuffet.phone }}</a></p>
+                            <p>Email: <a v-bind:href="'mailto:' + currentBuffet.email">{{ currentBuffet.email }}</a></p>
+                            <p>Endereço completo: {{ currentBuffet.address }} {{ currentBuffet.district }} {{ currentBuffet.city }} {{ currentBuffet.state }}</p>
+                            <p>Métodos de pagamento: <span class="badge text-bg-success">{{ currentBuffet.payment_method }}</span></p>
+                        </div>
+                        <div>
+                            <h4>Eventos disponíveis</h4>
+                            <template v-if="events.length > 0">
+                                <div v-for="event in events" class="m-3">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            <h6>{{ event.name }}</h6>
+                                            <p>{{ event.description }}</p>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <h6>Quantidade de pessoas</h6>
+                                            <p>{{ event.min_quantity }} - {{ event.max_quantity }}</p>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <h6>Duração</h6>
+                                            <p>{{ event.duration }} minutos</p>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <h6>Cardápio</h6>
+                                            <p>{{ event.menu }}</p>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <h6>Bebida Alcoólica</h6>
+                                            <p v-if="event.alcoholic_drink">&#9989; Sim</p>
+                                            <p v-else>&#10060; Não</p>
+                                            <h6>Decoração</h6>
+                                            <p v-if="event.party_decoration">&#9989; Sim</p>
+                                            <p v-else>&#10060; Não</p>
+                                            <h6>Serviço de valete</h6>
+                                            <p v-if="event.valet_service">&#9989; Sim</p>
+                                            <p v-else>&#10060; Não</p>                                        
+                                        </li>
+                                        <li class="list-group-item">
+                                            <h6>Informações sobre o local do evento</h6>
+                                            <p>{{ event.local }}</p>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <template v-if="event.weekend_base_price">
+                                                <h6>Final de semana</h6>
+                                                <p>Preço base: $ {{ event.weekend_base_price }}</p>
+                                                <p>Preço adicional por pessoa: $ {{ event.weekend_additional_price_person }}</p>
+                                                <p>Preço adicional por hora: $ {{ event.weekend_additional_price_hour }}</p>
+                                            </template>
+                                            <template v-if="event.weekday_base_price">
+                                                <h6>Dia de semana</h6>
+                                                <p>Preço base: $ {{ event.weekday_base_price }}</p>
+                                                <p>Preço adicional por pessoa: $ {{ event.weekday_additional_price_person }}</p>
+                                                <p>Preço adicional por hora: $ {{ event.weekday_additional_price_hour }}</p>
+                                            </template>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </template>
+                            <template v-else>
+                                <p>Esse buffet ainda não possui eventos disponíveis, volte mais tarde!</p>
+                            </template>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                    </div>
+                </div>
             </div>
         </div>
     </div>
